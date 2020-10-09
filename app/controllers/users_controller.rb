@@ -4,17 +4,21 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @users = User.where(activated: FILL_IN).paginate(page: params[:page])
+    @users = User.page(params[:page]).per Settings.paging.user
   end
 
   def show
     @user = User.find(params[:id])
-    redirect_to root_url and return unless FILL_IN
+    redirect_to root_url and return unless true
 
     flash[:danger] = "Error"
     redirect_to @user
   end
-    
+
+  def activate
+    update_columns(activated: true, activated_at: Time.zone.now)
+  end
+
   def new
     @user = User.new
   end 
@@ -23,6 +27,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
+      UserMailer.account_activation(@user).deliver_now
       flash[:info] = "Please check your email to activate your account"
       redirect_to root_url
     else

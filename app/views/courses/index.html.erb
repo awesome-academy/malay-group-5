@@ -1,0 +1,13 @@
+<% provide(:title, "Courses") %>
+
+<h1>Courses</h1>
+
+<% if current_user.admin? %>
+  <%= link_to "Add Course", new_course_url %>
+<% end %>
+
+<ul class="courses">
+  <%= render @course %>
+</ul>
+
+<%= paginate @course %>

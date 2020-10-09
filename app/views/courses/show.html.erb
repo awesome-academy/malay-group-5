@@ -1,0 +1,17 @@
+<% provide :title, @course.name %>
+
+<p>
+  <strong>Title:</strong>
+  <%= @course.name %>
+</p>
+
+<p>
+  <strong>Starting date:</strong>
+  <%= @course.started_at %>
+</p>
+
+<% if current_user.admin? %>
+  <%= link_to "Edit course", edit_course_path %> |
+<% end %>
+
+<%= link_to "Back", courses_path %>
